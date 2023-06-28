@@ -17,7 +17,19 @@ app.all("*", (_, res) => {
 });
 
 app.use((err, req, res, next) => {
-  return res.status(500).send({ mgs: "Internal Server Error" });
+  if (err.msg) {
+    res.status(404).send({ msg: err.msg });
+  } else next(err);
+});
+
+app.use((err, req, res, next) => {
+  if (err.code) {
+    res.status(400).send({ msg: "Bad Request" });
+  }
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).send({ mgs: "Internal Server Error" });
 });
 
 module.exports = app;

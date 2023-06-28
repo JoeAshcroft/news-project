@@ -11,7 +11,7 @@ const searchTopics = (req, res, next) => {
     });
 };
 
-const searchEndpoints = (req, res) => {
+const searchEndpoints = (req, res, next) => {
   res
     .status(200)
     .send({ endpointData })
@@ -20,11 +20,15 @@ const searchEndpoints = (req, res) => {
     });
 };
 
-const searchArticleById = (req, res) => {
+const searchArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  getArticleById(article_id).then((article) => {
-    res.status(200).send({ article });
-  });
+  getArticleById(article_id)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 module.exports = { searchTopics, searchEndpoints, searchArticleById };

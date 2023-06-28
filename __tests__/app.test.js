@@ -60,6 +60,24 @@ describe("GET /api/articles/:article_id", () => {
         });
       });
   });
+  test("should respond with 400 error when article_id is an invalid type", () => {
+    return request(app)
+      .get("/api/articles/notanumber")
+      .expect(400)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+  test("Should respond with 404 Not Found if given valid article_id but which has no corresponding article", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(404)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body.msg).toBe("Not Found");
+      });
+  });
 });
 
 describe("ALL non-existent path", () => {
