@@ -1,4 +1,4 @@
-const getTopics = require("../model/app.model");
+const { getTopics, getArticleById } = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
 
 const searchTopics = (req, res, next) => {
@@ -20,4 +20,11 @@ const searchEndpoints = (req, res) => {
     });
 };
 
-module.exports = { searchTopics, searchEndpoints };
+const searchArticleById = (req, res) => {
+  const { article_id } = req.params;
+  getArticleById(article_id).then((article) => {
+    res.status(200).send({ article });
+  });
+};
+
+module.exports = { searchTopics, searchEndpoints, searchArticleById };
