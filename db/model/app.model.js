@@ -17,4 +17,10 @@ const getArticleById = (article_id) => {
     });
 };
 
-module.exports = { getTopics, getArticleById };
+const getArticles = () => {
+  return db.query("SELECT * FROM articles;").then(({ rows }) => {
+    return rows;
+  });
+};
+
+module.exports = { getTopics, getArticleById, getArticles };

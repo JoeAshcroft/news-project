@@ -1,5 +1,10 @@
-const { getTopics, getArticleById } = require("../model/app.model");
+const {
+  getTopics,
+  getArticleById,
+  getArticles,
+} = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
+const { articleData } = require("../data/test-data");
 
 const searchTopics = (req, res, next) => {
   getTopics()
@@ -31,4 +36,15 @@ const searchArticleById = (req, res, next) => {
     });
 };
 
-module.exports = { searchTopics, searchEndpoints, searchArticleById };
+const searchArticles = (req, res, next) => {
+  getArticles().then({ articles });
+  console.log(articles, "controller articles");
+  res.status(200).send({ articles });
+};
+
+module.exports = {
+  searchTopics,
+  searchEndpoints,
+  searchArticleById,
+  searchArticles,
+};

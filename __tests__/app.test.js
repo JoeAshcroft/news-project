@@ -43,7 +43,7 @@ describe("GET /api", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test("Should return a status of 200 and repsond with an object containing the relevant article based on its id", () => {
+  test("Should return a status of 200 and repsond with a single article object which has article_id 1", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -65,7 +65,6 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/notanumber")
       .expect(400)
       .then(({ body }) => {
-        console.log(body);
         expect(body.msg).toBe("Bad Request");
       });
   });
@@ -74,11 +73,22 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/9999")
       .expect(404)
       .then(({ body }) => {
-        console.log(body);
         expect(body.msg).toBe("Not Found");
       });
   });
 });
+
+// describe("GET /api/articles", () => {
+//   test("Should respond with 200", () => {
+//     return request(app)
+//       .get("/api/articles")
+//       .expect(200)
+//       .then(({ body }) => {
+//         console.log(body.articles, "test body");
+//         expect(body.articles).toEqual({});
+//       });
+//   });
+// });
 
 describe("ALL non-existent path", () => {
   test("Should respond with 404 Not Found if path is invalid", () => {
