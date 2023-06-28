@@ -3,6 +3,7 @@ const app = require("../db/app.js");
 const request = require("supertest");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
+const endpointData = require("../endpoints.json");
 
 beforeEach(() => {
   return seed(testData);
@@ -31,8 +32,13 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET /api", () => {
-  test("Should return status of 200", () => {
-    return request(app).get("/api").expect(200);
+  test("Should return status of 200 and a JSON object with information on each available endpoint.  Each must include a description, accepted queries, request body format and an example response", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.endpointData).toEqual(endpointData);
+      });
   });
 });
 

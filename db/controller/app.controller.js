@@ -1,4 +1,5 @@
 const getTopics = require("../model/app.model");
+const endpointData = require("../../endpoints.json");
 
 const searchTopics = (req, res, next) => {
   getTopics()
@@ -13,7 +14,7 @@ const searchTopics = (req, res, next) => {
 const searchEndpoints = (req, res) => {
   res
     .status(200)
-    .send({})
+    .send({ endpointData })
     .catch((err) => {
       next(err);
     });
