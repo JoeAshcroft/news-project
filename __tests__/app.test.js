@@ -43,7 +43,7 @@ describe("GET /api", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test("Should return a status of 200 and repsond with an object containing the relevant article based on its id", () => {
+  test("Should return a status of 200 and respond with an article object with article_id 1", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -65,7 +65,6 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/notanumber")
       .expect(400)
       .then(({ body }) => {
-        console.log(body);
         expect(body.msg).toBe("Bad Request");
       });
   });
@@ -74,7 +73,6 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/9999")
       .expect(404)
       .then(({ body }) => {
-        console.log(body);
         expect(body.msg).toBe("Not Found");
       });
   });
