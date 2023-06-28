@@ -12,7 +12,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe("GET /api", () => {
+describe("GET /api/topics", () => {
   test("Should return status of 200", () => {
     return request(app).get("/api/topics").expect(200);
   });
@@ -27,6 +27,12 @@ describe("GET /api", () => {
           expect(topic).toHaveProperty("description", expect.any(String));
         });
       });
+  });
+});
+
+describe("GET /api", () => {
+  test("Should return status of 200", () => {
+    return request(app).get("/api").expect(200);
   });
 });
 
