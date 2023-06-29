@@ -2,6 +2,7 @@ const {
   getTopics,
   getArticleById,
   getArticles,
+  getCommentsByArticleId,
 } = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
 
@@ -45,9 +46,20 @@ const searchArticleById = (req, res, next) => {
     });
 };
 
+const searchCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  getCommentsByArticleId(article_id).then((comments) => {
+    res.status(200).send({ comments });
+  })
+  .catch((err)=>{
+    next(err)
+  })
+};
+
 module.exports = {
   searchTopics,
   searchEndpoints,
   searchArticleById,
   searchArticles,
+  searchCommentsByArticleId,
 };

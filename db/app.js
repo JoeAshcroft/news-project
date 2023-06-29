@@ -5,6 +5,7 @@ const {
   searchEndpoints,
   searchArticleById,
   searchArticles,
+  searchCommentsByArticleId,
 } = require("../db/controller/app.controller");
 
 app.get("/api/topics", searchTopics);
@@ -16,6 +17,8 @@ app.get("/api/articles", searchArticles);
 app.get("/api/articles/:article_id", searchArticleById);
 
 app.get("/api/articles", searchArticles);
+
+app.get("/api/articles/:article_id/comments", searchCommentsByArticleId);
 
 app.all("*", (_, res) => {
   res.status(404).send({ status: 404, msg: "Not found" });

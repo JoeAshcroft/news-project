@@ -109,6 +109,43 @@ describe("GET /api/articles", () => {
   });
 });
 
+describe("GET /api/articles/:article_id/comments", () => {
+  test("should respond with 200 and list of comments sorted by date, with most recent first", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        body.comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id", expect.any(Number));
+          expect(comment).toHaveProperty("votes", expect.any(Number));
+          expect(comment).toHaveProperty("article_id", expect.any(Number));
+          expect(comment).toHaveProperty("created_at", expect.any(String));
+          expect(comment).toHaveProperty("body", expect.any(String));
+          expect(comment).toHaveProperty("author", expect.any(String));
+          expect(body.comments).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+      });
+  });
+  test("Should respond with 404 Not Found if given valid article_id but which has no corresponding article or comments", () => {
+    return request(app)
+      .get("/api/articles/9999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not Found");
+      });
+  });
+  test("should respond with 400 error when article_id is an invalid type when looking for its comments", () => {
+    return request(app)
+      .get("/api/articles/notanumber/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+});
+
 describe("ALL non-existent path", () => {
   test("Should respond with 404 Not Found if path is invalid", () => {
     return request(app)
