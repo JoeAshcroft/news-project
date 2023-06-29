@@ -78,6 +78,40 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
+describe("GET /api/articles", () => {
+  test("Should respond with 200 and return an array of all articles with correct properties listed by created date in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toBe(13);
+        body.articles.forEach((article) => {
+          expect(article).toHaveProperty("article_id", expect.any(Number));
+          expect(article).toHaveProperty("author", expect.any(String));
+          expect(article).toHaveProperty("title", expect.any(String));
+          expect(article).toHaveProperty("topic", expect.any(String));
+          expect(article).toHaveProperty("created_at", expect.any(String));
+          expect(article).toHaveProperty("votes", expect.any(Number));
+          expect(article).toHaveProperty("article_img_url", expect.any(String));
+          expect(article).toHaveProperty("comment_count", expect.any(String));
+          expect(article).not.toHaveProperty("body");
+        });
+      });
+  });
+  test("Should sort articles by created_at in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test('Should return X error', () => {
+    
+  });
+});
+
 describe("ALL non-existent path", () => {
   test("Should respond with 404 Not Found if path is invalid", () => {
     return request(app)

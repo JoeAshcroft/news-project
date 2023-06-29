@@ -4,11 +4,14 @@ const {
   searchTopics,
   searchEndpoints,
   searchArticleById,
+  searchArticles,
 } = require("../db/controller/app.controller");
 
 app.get("/api/topics", searchTopics);
 
 app.get("/api", searchEndpoints);
+
+app.get("/api/articles", searchArticles);
 
 app.get("/api/articles/:article_id", searchArticleById);
 
