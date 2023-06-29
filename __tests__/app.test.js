@@ -107,9 +107,6 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test('Should return X error', () => {
-    
-  });
 });
 
 describe("ALL non-existent path", () => {
