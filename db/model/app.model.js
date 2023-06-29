@@ -27,4 +27,5 @@ const getArticleById = (article_id) => {
     });
 };
 
+
 module.exports = { getTopics, getArticleById, getArticles };

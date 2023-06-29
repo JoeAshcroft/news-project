@@ -15,6 +15,8 @@ app.get("/api/articles", searchArticles);
 
 app.get("/api/articles/:article_id", searchArticleById);
 
+app.get("/api/articles", searchArticles);
+
 app.all("*", (_, res) => {
   res.status(404).send({ status: 404, msg: "Not found" });
 });

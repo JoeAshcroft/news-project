@@ -43,7 +43,7 @@ describe("GET /api", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test("Should return a status of 200 and respond with an article object with article_id 1", () => {
+  test("Should return a status of 200 and repsond with a single article object which has article_id 1", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
