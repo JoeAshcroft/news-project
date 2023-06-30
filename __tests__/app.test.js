@@ -154,6 +154,29 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("POST /api/articles/:article_id/comments", () => {
+  test("Should respond with 201 and respond with the posted comment after being added to db", () => {
+    const newComment = {
+      author: "icellusedkars",
+      body: "This comment sure seems pointless!",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: expect.any(String),
+          article_id: expect.any(Number),
+          author: expect.any(String),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+        });
+      });
+  });
+});
+
 describe("ALL non-existent path", () => {
   test("Should respond with 404 Not Found if path is invalid", () => {
     return request(app)

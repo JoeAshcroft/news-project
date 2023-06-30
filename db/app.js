@@ -6,7 +6,10 @@ const {
   searchArticleById,
   searchArticles,
   searchCommentsByArticleId,
+  addComment,
 } = require("../db/controller/app.controller");
+
+app.use(express.json());
 
 app.get("/api/topics", searchTopics);
 
@@ -19,6 +22,8 @@ app.get("/api/articles/:article_id", searchArticleById);
 app.get("/api/articles", searchArticles);
 
 app.get("/api/articles/:article_id/comments", searchCommentsByArticleId);
+
+app.post("/api/articles/:article_id/comments", addComment);
 
 app.all("*", (_, res) => {
   res.status(404).send({ status: 404, msg: "Not found" });

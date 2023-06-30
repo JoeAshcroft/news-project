@@ -3,6 +3,7 @@ const {
   getArticleById,
   getArticles,
   getCommentsByArticleId,
+  postComment,
 } = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
 
@@ -57,10 +58,23 @@ const searchCommentsByArticleId = (req, res, next) => {
     });
 };
 
+const addComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const { author, body } = req.body;
+  postComment(article_id, author, body)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 module.exports = {
   searchTopics,
   searchEndpoints,
   searchArticleById,
   searchArticles,
   searchCommentsByArticleId,
+  addComment,
 };
