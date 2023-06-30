@@ -175,6 +175,36 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
+  test("Should respond with 400 Bad Request when article_id is an invalid type when trying to post comment", () => {
+    const newComment = {
+      author: "icellusedkars",
+      body: "This comment sure seems pointless!",
+    };
+    return request(app)
+      .post("/api/articles/notanumber/comments")
+      .send(newComment)
+      .expect(400);
+  });
+  test("Should respond with 400 Bad Request when posting a comment with incorrect author type", () => {
+    const newCommentBadAuthor = {
+      author: 2,
+      body: "This comment sure seems pointless!",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newCommentBadAuthor)
+      .expect(400);
+  });
+  test("Should respond with 400 Bad Request when posting a comment with non-existent author", () => {
+    const newCommentBadAuthor = {
+      author: "joe",
+      body: "This comment sure seems pointless!",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newCommentBadAuthor)
+      .expect(400);
+  });
 });
 
 describe("ALL non-existent path", () => {
