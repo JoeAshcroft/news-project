@@ -43,7 +43,7 @@ describe("GET /api", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test("Should return a status of 200 and repsond with a single article object which has article_id 1", () => {
+  test("Should return a status of 200 and respond with a single article object which has article_id 1", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -105,6 +105,51 @@ describe("GET /api/articles", () => {
         expect(body.articles).toBeSortedBy("created_at", {
           descending: true,
         });
+      });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("should respond with 200 and list of comments sorted by date, with most recent first", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        body.comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id", expect.any(Number));
+          expect(comment).toHaveProperty("votes", expect.any(Number));
+          expect(comment).toHaveProperty("article_id", expect.any(Number));
+          expect(comment).toHaveProperty("created_at", expect.any(String));
+          expect(comment).toHaveProperty("body", expect.any(String));
+          expect(comment).toHaveProperty("author", expect.any(String));
+          expect(body.comments).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+      });
+  });
+  test("Should respond with 200 if given valid article_id with existing article but which has no comments", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toHaveLength(0);
+      });
+  });
+  test("Should respond with 404 Not Found if given valid article_id but which has no corresponding article or comments", () => {
+    return request(app)
+      .get("/api/articles/9999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not Found");
+      });
+  });
+  test("should respond with 400 error when article_id is an invalid type when looking for its comments", () => {
+    return request(app)
+      .get("/api/articles/notanumber/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
       });
   });
 });

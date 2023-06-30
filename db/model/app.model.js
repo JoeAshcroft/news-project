@@ -1,4 +1,5 @@
 const db = require("../connection");
+const checkArticleExists = require("./articles.model");
 
 const getTopics = () => {
   return db.query("SELECT * FROM topics;").then(({ rows }) => {
@@ -27,5 +28,22 @@ const getArticleById = (article_id) => {
     });
 };
 
+const getCommentsByArticleId = (article_id) => {
+  return db
+    .query(
+      `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC`,
+      [article_id]
+    )
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return checkArticleExists(article_id);
+      } else return rows;
+    });
+};
 
-module.exports = { getTopics, getArticleById, getArticles };
+module.exports = {
+  getTopics,
+  getArticleById,
+  getArticles,
+  getCommentsByArticleId,
+};
