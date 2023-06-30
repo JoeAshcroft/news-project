@@ -5,7 +5,6 @@ const {
   getCommentsByArticleId,
 } = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
-const checkArticleExists = require("../model/articles.model");
 
 const searchTopics = (req, res, next) => {
   getTopics()
