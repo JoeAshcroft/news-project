@@ -8,6 +8,9 @@ const {
   searchCommentsByArticleId,
   addComment,
 } = require("../db/controller/app.controller");
+const cors = require("cors");
+
+app.use(cors());
 
 app.use(express.json());
 

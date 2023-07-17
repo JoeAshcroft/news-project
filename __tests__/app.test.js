@@ -157,7 +157,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 describe("POST /api/articles/:article_id/comments", () => {
   test("Should respond with 201 and respond with the posted comment after being added to db", () => {
     const newComment = {
-      author: "icellusedkars",
+      username: "icellusedkars",
       body: "This comment sure seems pointless!",
     };
     return request(app)
@@ -167,44 +167,78 @@ describe("POST /api/articles/:article_id/comments", () => {
       .then(({ body }) => {
         expect(body.comment).toMatchObject({
           comment_id: expect.any(Number),
-          body: expect.any(String),
-          article_id: expect.any(Number),
-          author: expect.any(String),
+          body: "This comment sure seems pointless!",
+          article_id: 3,
+          author: "icellusedkars",
           votes: expect.any(Number),
           created_at: expect.any(String),
         });
       });
   });
-  test("Should respond with 400 Bad Request when article_id is an invalid type when trying to post comment", () => {
+  test("Should respond with 201 and respond with the posted comment after being added to db even if sent unneccesary properties", () => {
     const newComment = {
-      author: "icellusedkars",
+      username: "icellusedkars",
       body: "This comment sure seems pointless!",
+      fave_colour: "blue",
     };
     return request(app)
-      .post("/api/articles/notanumber/comments")
+      .post("/api/articles/3/comments")
       .send(newComment)
-      .expect(400);
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toHaveProperty("comment_id", expect.any(Number));
+        expect(body.comment).toHaveProperty("body", expect.any(String));
+        expect(body.comment).toHaveProperty("article_id", expect.any(Number));
+        expect(body.comment).toHaveProperty("author", expect.any(String));
+        expect(body.comment).toHaveProperty("votes", expect.any(Number));
+        expect(body.comment).toHaveProperty("created_at", expect.any(String));
+      });
   });
-  test("Should respond with 400 Bad Request when posting a comment with incorrect author type", () => {
-    const newCommentBadAuthor = {
-      author: 2,
-      body: "This comment sure seems pointless!",
-    };
-    return request(app)
-      .post("/api/articles/3/comments")
-      .send(newCommentBadAuthor)
-      .expect(400);
-  });
-  test("Should respond with 400 Bad Request when posting a comment with non-existent author", () => {
-    const newCommentBadAuthor = {
-      author: "joe",
-      body: "This comment sure seems pointless!",
-    };
-    return request(app)
-      .post("/api/articles/3/comments")
-      .send(newCommentBadAuthor)
-      .expect(400);
-  });
+});
+
+test("Should respond with 400 Bad Request when article_id is an invalid type when trying to post comment", () => {
+  const newComment = {
+    username: "icellusedkars",
+    body: "This comment sure seems pointless!",
+  };
+  return request(app)
+    .post("/api/articles/notanumber/comments")
+    .send(newComment)
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Bad Request");
+    });
+});
+test("Should respond with 400 Bad Request when posting a comment with incorrect author type", () => {
+  const newCommentBadAuthor = {
+    username: 2,
+    body: "This comment sure seems pointless!",
+  };
+  return request(app)
+    .post("/api/articles/3/comments")
+    .send(newCommentBadAuthor)
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Not Found");
+    });
+});
+test("Should respond with 400 Bad Request when posting a comment with non-existent author", () => {
+  const newCommentBadAuthor = {
+    username: "joe",
+    body: "This comment sure seems pointless!",
+  };
+  return request(app)
+    .post("/api/articles/3/comments")
+    .send(newCommentBadAuthor)
+    .expect(400);
+});
+test("Should respond with 404 Not Found if given valid article_id but which has no corresponding article or comments", () => {
+  return request(app)
+    .get("/api/articles/9999/comments")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Not Found");
+    });
 });
 
 describe("ALL non-existent path", () => {

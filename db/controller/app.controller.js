@@ -60,8 +60,9 @@ const searchCommentsByArticleId = (req, res, next) => {
 
 const addComment = (req, res, next) => {
   const { article_id } = req.params;
-  const { author, body } = req.body;
-  postComment(article_id, author, body)
+  const { username, body } = req.body;
+
+  postComment(article_id, username, body)
     .then((comment) => {
       res.status(201).send({ comment });
     })
