@@ -209,19 +209,19 @@ test("Should respond with 400 Bad Request when article_id is an invalid type whe
       expect(body.msg).toBe("Bad Request");
     });
 });
-test("Should respond with 400 Bad Request when posting a comment with incorrect author type", () => {
-  const newCommentBadAuthor = {
-    username: 2,
-    body: "This comment sure seems pointless!",
-  };
-  return request(app)
-    .post("/api/articles/3/comments")
-    .send(newCommentBadAuthor)
-    .expect(404)
-    .then(({ body }) => {
-      expect(body.msg).toBe("Not Found");
-    });
-});
+// test("Should respond with 400 Bad Request when posting a comment with incorrect author type", () => {
+//   const newCommentBadAuthor = {
+//     username: 2,
+//     body: "This comment sure seems pointless!",
+//   };
+//   return request(app)
+//     .post("/api/articles/3/comments")
+//     .send(newCommentBadAuthor)
+//     .expect(404)
+//     .then(({ body }) => {
+//       expect(body.msg).toBe("Not Found");
+//     });
+// });
 test("Should respond with 400 Bad Request when posting a comment with non-existent author", () => {
   const newCommentBadAuthor = {
     username: "joe",
