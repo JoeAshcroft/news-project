@@ -41,9 +41,33 @@ const getCommentsByArticleId = (article_id) => {
     });
 };
 
+const postComment = (article_id, author, body) => {
+  return db
+    .query(
+      `INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3) RETURNING *;`,
+      [article_id, author, body]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
+
+const patchArticleVote = (article_id, newVote) => {
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $2 WHERE article_id = $1 RETURNING *;`,
+      [article_id, newVote]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
+
 module.exports = {
   getTopics,
   getArticleById,
   getArticles,
   getCommentsByArticleId,
+  postComment,
+  patchArticleVote,
 };
