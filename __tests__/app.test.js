@@ -154,6 +154,21 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("PATCH /api/articles/:article_id", () => {
+  test("should increment article votes by 1", () => {
+    const newVote = {
+      inc_votes: 1,
+    };
+    return request(app)
+      .patch("/api/articles/4")
+      .send(newVote)
+      .expect(202)
+      .then(({ body }) => {
+        expect(body.article.votes).toBe(1);
+      });
+  });
+});
+
 describe("POST /api/articles/:article_id/comments", () => {
   test("Should respond with 201 and respond with the posted comment after being added to db", () => {
     const newComment = {

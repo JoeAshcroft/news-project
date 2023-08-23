@@ -4,6 +4,7 @@ const {
   getArticles,
   getCommentsByArticleId,
   postComment,
+  patchArticleVote,
 } = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
 
@@ -71,6 +72,18 @@ const addComment = (req, res, next) => {
     });
 };
 
+const updateArticleVote = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+  patchArticleVote(article_id, inc_votes)
+    .then((updatedArticle) => {
+      res.status(202).send({ article: updatedArticle });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 module.exports = {
   searchTopics,
   searchEndpoints,
@@ -78,4 +91,5 @@ module.exports = {
   searchArticles,
   searchCommentsByArticleId,
   addComment,
+  updateArticleVote,
 };
