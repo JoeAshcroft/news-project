@@ -1,5 +1,6 @@
 const db = require("../connection");
 const checkArticleExists = require("./articles.model");
+const checkCommentAuthorExists = require("./comments.model");
 
 const getTopics = () => {
   return db.query("SELECT * FROM topics;").then(({ rows }) => {

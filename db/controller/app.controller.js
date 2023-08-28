@@ -7,6 +7,7 @@ const {
   patchArticleVote,
 } = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
+const checkCommentAuthorExists = require("../model/comments.model");
 
 const searchTopics = (req, res, next) => {
   getTopics()
@@ -62,7 +63,6 @@ const searchCommentsByArticleId = (req, res, next) => {
 const addComment = (req, res, next) => {
   const { article_id } = req.params;
   const { username, body } = req.body;
-
   postComment(article_id, username, body)
     .then((comment) => {
       res.status(201).send({ comment });
