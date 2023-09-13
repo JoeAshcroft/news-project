@@ -5,9 +5,10 @@ const {
   getCommentsByArticleId,
   postComment,
   patchArticleVote,
+  getUsers,
 } = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
-const checkCommentAuthorExists = require("../model/comments.model");
+// const checkCommentAuthorExists = require("../model/comments.model");
 
 const searchTopics = (req, res, next) => {
   getTopics()
@@ -72,6 +73,16 @@ const addComment = (req, res, next) => {
     });
 };
 
+const searchUsers = (req, res, next) => {
+  getUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 const updateArticleVote = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
@@ -92,4 +103,5 @@ module.exports = {
   searchCommentsByArticleId,
   addComment,
   updateArticleVote,
+  searchUsers,
 };

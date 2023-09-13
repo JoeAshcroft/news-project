@@ -154,6 +154,22 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("GET /api/users", () => {
+  it("Responds with an array of user objects, with properties username, name, avatar_url", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users.length).toEqual(4);
+        body.users.forEach((user) => {
+          expect(user).toHaveProperty("username");
+          expect(user).toHaveProperty("name");
+          expect(user).toHaveProperty("avatar_url");
+        });
+      });
+  });
+});
+
 describe("PATCH /api/articles/:article_id", () => {
   test("should increment article votes by 1", () => {
     const newVote = {

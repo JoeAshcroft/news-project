@@ -1,6 +1,6 @@
 const db = require("../connection");
 const checkArticleExists = require("./articles.model");
-const checkCommentAuthorExists = require("./comments.model");
+// const checkCommentAuthorExists = require("./comments.model");
 
 const getTopics = () => {
   return db.query("SELECT * FROM topics;").then(({ rows }) => {
@@ -42,11 +42,11 @@ const getCommentsByArticleId = (article_id) => {
     });
 };
 
-const postComment = (article_id, author, body) => {
+const postComment = (article_id, username, body) => {
   return db
     .query(
       `INSERT INTO comments (article_id, author, body) VALUES ($1, $2, $3) RETURNING *;`,
-      [article_id, author, body]
+      [article_id, username, body]
     )
     .then(({ rows }) => {
       return rows[0];
@@ -64,6 +64,18 @@ const patchArticleVote = (article_id, newVote) => {
     });
 };
 
+const getUsers = () => {
+  return db
+    .query(
+      `SELECT users.username,
+    users.name,
+    users.avatar_url FROM users;`
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
+
 module.exports = {
   getTopics,
   getArticleById,
@@ -71,4 +83,5 @@ module.exports = {
   getCommentsByArticleId,
   postComment,
   patchArticleVote,
+  getUsers,
 };

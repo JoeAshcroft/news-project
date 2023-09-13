@@ -8,6 +8,7 @@ const {
   searchCommentsByArticleId,
   addComment,
   updateArticleVote,
+  searchUsers,
 } = require("../db/controller/app.controller");
 const cors = require("cors");
 
@@ -18,6 +19,8 @@ app.use(express.json());
 app.get("/api/topics", searchTopics);
 
 app.get("/api", searchEndpoints);
+
+app.get("/api/users", searchUsers);
 
 app.get("/api/articles", searchArticles);
 
