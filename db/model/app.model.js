@@ -76,7 +76,7 @@ const patchArticleVote = (article_id, newVote) => {
     });
 };
 
-const removeComment = (article_id) => {
+const removeComment = (comment_id) => {
   return db
     .query(
       `
@@ -84,12 +84,12 @@ const removeComment = (article_id) => {
   WHERE comment_id = $1 
   RETURNING *
   `,
-      [article_id]
+      [comment_id]
     )
     .then(({ rows }) => {
       if (rows.length === 0) {
         return db
-          .query("SELECT * FROM comments WHERE article_id = $1", [article_id])
+          .query("SELECT * FROM comments WHERE article_id = $1", [comment_id])
           .then(({ rows }) => {
             if (rows.length === 0) {
               return Promise.reject({
