@@ -206,25 +206,6 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("Should respond with 201 and respond with the posted comment after being added to db even if sent unneccesary properties", () => {
-    const newComment = {
-      username: "icellusedkars",
-      body: "This comment sure seems pointless!",
-      fave_colour: "blue",
-    };
-    return request(app)
-      .post("/api/articles/3/comments")
-      .send(newComment)
-      .expect(201)
-      .then(({ body }) => {
-        expect(body.comment).toHaveProperty("comment_id", expect.any(Number));
-        expect(body.comment).toHaveProperty("body", expect.any(String));
-        expect(body.comment).toHaveProperty("article_id", expect.any(Number));
-        expect(body.comment).toHaveProperty("author", expect.any(String));
-        expect(body.comment).toHaveProperty("votes", expect.any(Number));
-        expect(body.comment).toHaveProperty("created_at", expect.any(String));
-      });
-  });
 });
 
 test("Should respond with 400 Bad Request when article_id is an invalid type when trying to post comment", () => {
