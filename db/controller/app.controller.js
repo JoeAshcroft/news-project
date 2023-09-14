@@ -6,6 +6,7 @@ const {
   postComment,
   patchArticleVote,
   getUsers,
+  removeComment,
 } = require("../model/app.model");
 const endpointData = require("../../endpoints.json");
 // const checkCommentAuthorExists = require("../model/comments.model");
@@ -63,7 +64,10 @@ const searchCommentsByArticleId = (req, res, next) => {
 
 const addComment = (req, res, next) => {
   const { article_id } = req.params;
-  const { username, body } = req.body;
+  const { username, body, ...extraProp } = req.body;
+  if (Object.keys(extraProp).length > 0) {
+    return res.status(400).send({ msg: "Bad request, extra properties" });
+  }
   postComment(article_id, username, body)
     .then((comment) => {
       res.status(201).send({ comment });
@@ -80,6 +84,17 @@ const searchUsers = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+    });
+};
+
+const deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  removeCommentByCommentID(comment_id)
+    .then((comment) => {
+      res.status(204).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
     });
 };
 
@@ -104,4 +119,5 @@ module.exports = {
   addComment,
   updateArticleVote,
   searchUsers,
+  deleteComment,
 };

@@ -53,17 +53,6 @@ const postComment = (article_id, username, body) => {
     });
 };
 
-const patchArticleVote = (article_id, newVote) => {
-  return db
-    .query(
-      `UPDATE articles SET votes = votes + $2 WHERE article_id = $1 RETURNING *;`,
-      [article_id, newVote]
-    )
-    .then(({ rows }) => {
-      return rows[0];
-    });
-};
-
 const getUsers = () => {
   return db
     .query(
@@ -76,6 +65,44 @@ const getUsers = () => {
     });
 };
 
+const patchArticleVote = (article_id, newVote) => {
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $2 WHERE article_id = $1 RETURNING *;`,
+      [article_id, newVote]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
+
+const removeComment = (article_id) => {
+  return db
+    .query(
+      `
+  DELETE FROM comments 
+  WHERE comment_id = $1 
+  RETURNING *
+  `,
+      [article_id]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return db
+          .query("SELECT * FROM comments WHERE article_id = $1", [article_id])
+          .then(({ rows }) => {
+            if (rows.length === 0) {
+              return Promise.reject({
+                status: 404,
+                msg: "Valid ID type but no comment found",
+              });
+            }
+            return row;
+          });
+      }
+    });
+};
+
 module.exports = {
   getTopics,
   getArticleById,
@@ -84,4 +111,5 @@ module.exports = {
   postComment,
   patchArticleVote,
   getUsers,
+  removeComment,
 };

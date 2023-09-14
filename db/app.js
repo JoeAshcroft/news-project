@@ -9,6 +9,7 @@ const {
   addComment,
   updateArticleVote,
   searchUsers,
+  deleteComment,
 } = require("../db/controller/app.controller");
 const cors = require("cors");
 
@@ -33,6 +34,8 @@ app.get("/api/articles/:article_id/comments", searchCommentsByArticleId);
 app.post("/api/articles/:article_id/comments", addComment);
 
 app.patch("/api/articles/:article_id", updateArticleVote);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.all("*", (_, res) => {
   res.status(404).send({ status: 404, msg: "Not found" });
